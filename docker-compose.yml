@@ -4,10 +4,9 @@ services:
     build:
       context: ./angular-15-client
     ports:
-      - "80:80"
+      - "4200:4200"
     depends_on:
       - webback
-
   webback:
     build:
       context: ./spring-boot-server
@@ -24,5 +23,3 @@ services:
       POSTGRES_DB: postgres
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: 1234567890
-
-

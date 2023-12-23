@@ -13,7 +13,7 @@ public class CorsConfig {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
                 registry.addMapping("/**")
-                        .allowedOrigins("http://webdb:4200")
+                        .allowedOrigins("http://webback:4200")
                         .allowedMethods("*")
                         .allowedHeaders("*");
             }

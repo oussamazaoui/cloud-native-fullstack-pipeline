@@ -1,1 +1,28 @@
+version: '3.8'
+services:
+  webfront:
+    build:
+      context: ./angular-15-client
+    ports:
+      - "80:80"
+    depends_on:
+      - webback
+
+  webback:
+    build:
+      context: ./spring-boot-server
+    ports:
+      - "8080:8080"
+    depends_on:
+      - webdb
+
+  webdb:
+    image: postgres:latest
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_DB: postgres
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 1234567890
+
 

@@ -1,12 +1,8 @@
 # Use a base image with Maven to build the Spring Boot application
-FROM maven:3.6.3-jdk-11 AS BUILD_ARTIFACT
+FROM openjdk:11-jre-slim
 WORKDIR /app
-COPY . .
+COPY target/spring-boot-data-jpa-0.0.1-SNAPSHOT.jar /app
 RUN mvn clean install -DskipTests
-# Use a Tomcat image as the runtime image
-FROM tomcat:9-jdk11
-RUN rm -rf /usr/local/tomcat/webapps/*
-COPY --from=BUILD_ARTIFACT /app/target/spring-boot-data-jpa-0.0.1-SNAPSHOT.war /usr/local/tomcat/webapps/ROOT.war
 EXPOSE 8080
-CMD ["catalina.sh", "run"]
+CMD ["java", "-jar", "spring-boot-data-jpa-0.0.1-SNAPSHOT.jar"]
 

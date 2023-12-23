@@ -1,0 +1,4 @@
+com\bezkoder\spring\datajpa\controller\TutorialController.class
+com\bezkoder\spring\datajpa\model\Tutorial.class
+com\bezkoder\spring\datajpa\repository\TutorialRepository.class
+com\bezkoder\spring\datajpa\SpringBootDataJpaApplication.class

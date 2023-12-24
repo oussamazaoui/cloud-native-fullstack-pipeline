@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Tutorial } from '../models/tutorial.model';
 
-const baseUrl = 'http://webback:8080/api/tutorials';
+const baseUrl = environment.API_BASE_URL;
 
 @Injectable({
   providedIn: 'root'

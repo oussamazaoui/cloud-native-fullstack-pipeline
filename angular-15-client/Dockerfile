@@ -7,7 +7,6 @@ COPY . .
 RUN ng build
 FROM nginx:alpine
 COPY --from=build-stage /app/dist/angular-15-crud/ /usr/share/nginx/html
-COPY ngnx.conf /etc/nginx/conf.d/default.conf
 EXPOSE 80
 
 

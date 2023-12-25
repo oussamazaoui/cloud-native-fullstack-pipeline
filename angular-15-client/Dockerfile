@@ -8,6 +8,6 @@ RUN ng build
 FROM nginx:alpine
 COPY --from=build-stage /app/dist/angular-15-crud/ /usr/share/nginx/html
 EXPOSE 4200
-CMD ["nginx", "-g", "daemon off;"]
+
 
 

@@ -7,6 +7,7 @@ COPY . .
 RUN ng build --prod
 FROM nginx:latest
 COPY --from=build-stage /app/dist/angular-15-crud/ /usr/share/nginx/html
+COPY ngnx.conf /etc/nginx/conf.d/default.conf
 EXPOSE 80
 CMD nginx -g "daemon off;"
 

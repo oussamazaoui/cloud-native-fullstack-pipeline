@@ -10,7 +10,7 @@ import { environment } from './../../environments/environment';
   providedIn: 'root'
 })
 export class TutorialService {
-  private baseUrl = environment.apiUrl;
+  private baseUrl = '/api/tutorials';
   constructor(private http: HttpClient) { }
 
   getAll(): Observable<Tutorial[]> {

@@ -4,7 +4,7 @@ COPY package*.json ./
 RUN npm install -g @angular/cli
 RUN npm install
 COPY . .
-RUN ng build --prod
+RUN ng build --configuration=production
 FROM nginx:latest
 COPY --from=build-stage /app/dist/angular-15-crud/ /usr/share/nginx/html
 COPY ngnx.conf /etc/nginx/conf.d/default.conf

@@ -1,0 +1,93 @@
+# =======================
+# CI PIPELINE (azure-pipelines-ci.yml)
+# =======================
+trigger:
+  branches:
+    include:
+      - main
+
+variables:
+  dockerRegistryServiceConnection: '<your-acr-service-connection>'
+  backendImage: 'backend-app'
+  frontendImage: 'frontend-app'
+  containerRegistry: '<youracr>.azurecr.io'
+  tag: '$(Build.BuildId)'
+
+stages:
+- stage: BuildAndTest
+  displayName: "Build, Test, Scan, Dockerize"
+  jobs:
+  - job: CI
+    displayName: "CI Pipeline"
+    pool:
+      vmImage: 'ubuntu-latest'
+    steps:
+    - checkout: self
+
+    # BACKEND - Build first, then Sonar
+    - script: |
+        cd backend
+        ./mvnw clean install
+      displayName: 'Build Spring App'
+
+    # - task: SonarQubePrepare@5
+    #   inputs:
+    #     SonarQube: 'SonarQubeServiceConnection'
+    #     scannerMode: 'CLI'
+    #     configMode: 'manual'
+    #     cliProjectKey: 'spring-backend'
+    #     cliSources: 'backend/src'
+
+    # - task: SonarQubeAnalyze@5
+    # - task: SonarQubePublish@5
+    #   inputs:
+    #     pollingTimeoutSec: '300'
+
+    # FRONTEND
+    - script: |
+        cd frontend
+        npm install -g @angular/cli
+        npm install
+        npm run test --watch=false
+        npm run build --configuration production
+      displayName: 'Build & Test Angular App'
+
+    # Docker Build & Push
+    # - task: Docker@2
+    #   displayName: 'Build & Push Backend Image'
+    #   inputs:
+    #     containerRegistry: '$(dockerRegistryServiceConnection)'
+    #     repository: '$(backendImage)'
+    #     command: 'buildAndPush'
+    #     Dockerfile: 'backend/Dockerfile'
+    #     tags: |
+    #       $(tag)
+
+    # - task: Docker@2
+    #   displayName: 'Build & Push Frontend Image'
+    #   inputs:
+    #     containerRegistry: '$(dockerRegistryServiceConnection)'
+    #     repository: '$(frontendImage)'
+    #     command: 'buildAndPush'
+    #     Dockerfile: 'frontend/Dockerfile'
+    #     tags: |
+    #       $(tag)
+
+    # Trivy Scan Docker Images
+    # - task: Trivy@1
+    #   inputs:
+    #     imageName: '$(containerRegistry)/$(backendImage):$(tag)'
+    #     severity: 'HIGH,CRITICAL'
+
+    # - task: Trivy@1
+    #   inputs:
+    #     imageName: '$(containerRegistry)/$(frontendImage):$(tag)'
+    #     severity: 'HIGH,CRITICAL'
+
+    # Publish image info as artifact
+    - script: |
+        echo $(tag) > imageTag.txt
+    - task: PublishPipelineArtifact@1
+      inputs:
+        targetPath: 'imageTag.txt'
+        artifactName: 'image-info'

@@ -1,0 +1,62 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: webback
+  namespace: app-namespace
+  labels:
+    app: webback
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: webback
+  template:
+    metadata:
+      labels:
+        app: webback
+    spec:
+      serviceAccountName: "workload-identity-sa"
+      containers:
+        - name: webback
+          image: oussamazaoui872/aks-backend-app:latest
+          ports:
+            - containerPort: 8080
+          env:
+            - name: SPRING_DATASOURCE_URL
+              value: jdbc:postgresql://mydatabase.database-namespace.svc.cluster.local:5432/mydatabase
+            - name: SPRING_DATASOURCE_USERNAME
+              value: admin
+            - name: SPRING_DATASOURCE_PASSWORD
+              value: securepassword
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop: [ "ALL" ]
+            readOnlyRootFilesystem: true
+          command: ["java"]
+          args:
+            - "-Dfile.encoding=UTF-8"
+            - "-Djava.io.tmpdir=/app/tmp"
+            - "-jar"
+            - "/app/spring-boot-data-jpa-0.0.1-SNAPSHOT.jar"
+          volumeMounts:
+            - name: tmp-volume
+              mountPath: /app/tmp
+      volumes:
+        - name: tmp-volume
+          emptyDir: {}
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: webback
+  namespace: app-namespace
+spec:
+  selector:
+    app: webback
+  ports:
+    - protocol: TCP
+      port: 8080
+      targetPort: 8080
+  type: ClusterIP

@@ -54,4 +54,5 @@ spec:
     - protocol: TCP
       port: 80
       targetPort: 8081
-  type: LoadBalancer
+      nodePort: 8083  # You can specify any available port
+  type: NodePort

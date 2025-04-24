@@ -15,7 +15,6 @@ spec:
       labels:
         app: webback
     spec:
-      serviceAccountName: "workload-identity-sa"
       containers:
         - name: webback
           image: oussamazaoui872/aks-backend-app:latest
@@ -45,7 +44,6 @@ spec:
       volumes:
         - name: tmp-volume
           emptyDir: {}
-
 ---
 apiVersion: v1
 kind: Service

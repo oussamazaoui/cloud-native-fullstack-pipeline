@@ -1,0 +1,58 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: mydatabase
+  namespace: database-namespace
+spec:
+  serviceName: mydatabase
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mydatabase
+  template:
+    metadata:
+      labels:
+        app: mydatabase
+    spec:
+      containers:
+        - name: mydatabase
+          image: postgres:latest
+          ports:
+            - containerPort: 5432
+          env:
+            - name: POSTGRES_USER
+              value: admin
+            - name: POSTGRES_PASSWORD
+              value: securepassword
+            - name: POSTGRES_DB
+              value: mydatabase
+            - name: PGDATA
+              value: /var/lib/postgresql/data/pgdata
+          volumeMounts:
+            - name: db-storage
+              mountPath: /var/lib/postgresql/data
+  volumeClaimTemplates:
+    - metadata:
+        name: db-storage
+      spec:
+        accessModes:
+          - ReadWriteOnce
+        storageClassName: default
+        resources:
+          requests:
+            storage: 10Gi
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mydatabase
+  namespace: database-namespace
+spec:
+  selector:
+    app: mydatabase
+  ports:
+    - protocol: TCP
+      port: 5432
+      targetPort: 5432
+  type: ClusterIP

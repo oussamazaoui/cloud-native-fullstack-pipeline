@@ -1,10 +1,9 @@
 apiVersion: apps/v1
-kind: StatefulSet
+kind: Deployment
 metadata:
   name: mydatabase
   namespace: database-namespace
 spec:
-  serviceName: mydatabase
   replicas: 1
   selector:
     matchLabels:
@@ -31,17 +30,9 @@ spec:
           volumeMounts:
             - name: db-storage
               mountPath: /var/lib/postgresql/data
-  volumeClaimTemplates:
-    - metadata:
-        name: db-storage
-      spec:
-        accessModes:
-          - ReadWriteOnce
-        storageClassName: default
-        resources:
-          requests:
-            storage: 10Gi
-
+      volumes:
+        - name: db-storage
+          emptyDir: {}
 ---
 apiVersion: v1
 kind: Service

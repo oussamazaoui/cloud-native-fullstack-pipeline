@@ -1,0 +1,57 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: webfront
+  namespace: app-namespace
+  labels:
+    app: webfront
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: webfront
+  template:
+    metadata:
+      labels:
+        app: webfront
+    spec:
+      securityContext:
+        runAsUser: 1001
+        runAsGroup: 3001
+        fsGroup: 2001
+      containers:
+        - name: webfront
+          image: oussamazaoui872/aks-webfront-app:latest
+          ports:
+            - containerPort: 8081
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: false
+          volumeMounts:
+            - mountPath: /var/cache/nginx
+              name: nginx-cache
+            - mountPath: /var/run 
+              name: nginx-run
+          env:
+            - name: NGINX_PID_PATH
+              value: "/var/run/nginx.pid"
+      volumes:
+        - name: nginx-cache
+          emptyDir: {}
+        - name: nginx-run
+          emptyDir: {}
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: webfront
+  namespace: app-namespace
+spec:
+  selector:
+    app: webfront
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 8081
+  type: LoadBalancer

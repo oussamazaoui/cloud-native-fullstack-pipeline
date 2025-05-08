@@ -20,7 +20,7 @@ spec:
         fsGroup: 2001
       containers:
         - name: webfront
-          image: oussamazaoui872/angular-app:latest:latest  
+          image: oussamazaoui872/angular-app:latest  
           ports:
             - containerPort: 8081
           securityContext:

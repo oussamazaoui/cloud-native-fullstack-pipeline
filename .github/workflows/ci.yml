@@ -48,7 +48,7 @@ jobs:
         git add ./workloads/webback.yaml ./workloads/webfront.yaml
         # Check if there are changes to commit before attempting to commit
         if ! git diff --staged --quiet; then
-          git commit -m "chore: update image tags to ${{ env.TAG }} [skip ci]"
+          git commit -m "chore: update image tags to ${{ env.TAG }} "
           git push https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git HEAD:${{ github.ref_name }}
         else
           echo "No changes to commit in manifests."

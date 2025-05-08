@@ -52,5 +52,5 @@ spec:
     - protocol: TCP
       port: 80
       targetPort: 8081
-      nodePort: 8083  # You can specify any available port
+      nodePort: 30080  # You can specify any available port
   type: NodePort

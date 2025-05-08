@@ -12,6 +12,10 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v3
 
+    - name: Set up Docker image tag
+      id: vars
+      run: echo "TAG=${GITHUB_SHA::7}" >> $GITHUB_ENV
+
     - name: Log in to Docker Hub
       uses: docker/login-action@v2
       with:
@@ -20,14 +24,14 @@ jobs:
 
     ### Build & Push Angular Docker Image ###
     - name: Build Angular image
-      run: docker build -t oussamazaoui872/angular-app:latest ./angular-15-client
+      run: docker build -t oussamazaoui872/angular-app:${{ env.TAG }} ./angular-15-client
 
     - name: Push Angular image
-      run: docker push oussamazaoui872/angular-app:latest
+      run: docker push oussamazaoui872/angular-app:${{ env.TAG }}
 
     ### Build & Push Spring Boot Docker Image ###
     - name: Build Spring Boot image
-      run: docker build -t oussamazaoui872/springboot-app:latest ./spring-boot-server
+      run: docker build -t oussamazaoui872/springboot-app:${{ env.TAG }} ./spring-boot-server
 
     - name: Push Spring Boot image
-      run: docker push oussamazaoui872/springboot-app:latest
+      run: docker push oussamazaoui872/springboot-app:${{ env.TAG }}

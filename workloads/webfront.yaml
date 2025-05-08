@@ -22,7 +22,7 @@ spec:
         - name: webfront
           image: oussamazaoui872/angular-app:latest  
           ports:
-            - containerPort: 8081
+            - containerPort: 80
           securityContext:
             allowPrivilegeEscalation: false
             readOnlyRootFilesystem: false
@@ -51,6 +51,6 @@ spec:
   ports:
     - protocol: TCP
       port: 80
-      targetPort: 8081
+      targetPort: 80
       nodePort: 30080  # You can specify any available port
   type: NodePort

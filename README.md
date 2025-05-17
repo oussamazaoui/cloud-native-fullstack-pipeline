@@ -14,7 +14,21 @@ It implements a **CI/CD pipeline using GitHub Actions**, and **GitOps with Argo 
 
 ## 🧭 Project Structure
 
-<pre> ```plaintext . ├── .github/ │ └── workflows/ │ └── ci.yml # GitHub Actions workflow ├── angular-15-client/ # Angular frontend app ├── spring-boot-server/ # Spring Boot backend app ├── workloads/ │ ├── database.yaml # PostgreSQL Deployment + Service │ ├── webback.yaml # Spring Boot Deployment + Service │ └── webfront.yaml # Angular Deployment + Service ├── azure-pipelines.yml # (Optional) Azure DevOps pipeline ├── docker-compose.yml # For local development/testing ├── test.sh # Helper script (optional usage) └── README.md ``` </pre>
+.
+├── .github/
+│   └── workflows/
+│       └── ci.yml              # GitHub Actions workflow
+├── angular-15-client/          # Angular frontend app
+├── spring-boot-server/         # Spring Boot backend app
+├── workloads/
+│   ├── database.yaml           # PostgreSQL Deployment + Service
+│   ├── webback.yaml            # Spring Boot Deployment + Service
+│   └── webfront.yaml           # Angular Deployment + Service
+├── azure-pipelines.yml         # (Optional) Azure DevOps pipeline
+├── docker-compose.yml          # For local development/testing
+├── test.sh                     # Helper script (optional usage)
+└── README.md
+
 
 
 ## ⚙️ CI/CD Pipeline (GitHub Actions)

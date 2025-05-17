@@ -13,6 +13,7 @@ It implements a **CI/CD pipeline using GitHub Actions**, and **GitOps with Argo 
 ---
 
 ## 🧭 Project Structure
+
 .
 ├── .github/
 │ └── workflows/
@@ -27,6 +28,7 @@ It implements a **CI/CD pipeline using GitHub Actions**, and **GitOps with Argo 
 ├── docker-compose.yml # For local development/testing
 ├── test.sh # Helper script (optional usage)
 └── README.md
+
 ## ⚙️ CI/CD Pipeline (GitHub Actions)
 
 The file `.github/workflows/ci.yml` automates the following:
@@ -80,8 +82,6 @@ argocd app create fullstack-app \
   --path workloads \
   --dest-server https://kubernetes.default.svc \
   --dest-namespace default \
-  --sync-policy automated
+  --sync-policy automated```
 
-##👤 Author
-Oussama Zaoui
 

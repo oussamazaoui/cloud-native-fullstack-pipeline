@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: webback
-          image: oussamazaoui872/springboot-app:e8c3974
+          image: oussamazaoui872/springboot-app:0dfad8c
           ports:
             - containerPort: 8080
           env:

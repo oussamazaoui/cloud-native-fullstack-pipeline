@@ -1,25 +1,44 @@
 version: '3.8'
-services:
-  webfront:
-    build:
-      context: ./angular-15-client
-    ports:
-      - "80:80"
-    depends_on:
-      - webback
-  webback:
-    build:
-      context: ./spring-boot-server
-    ports:
-      - "8080:8080"
-    depends_on:
-      - webdb
 
-  webdb:
+services:
+  mydatabase:
     image: postgres:latest
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: securepassword
+      POSTGRES_DB: mydatabase
     ports:
       - "5432:5432"
+    volumes:
+      - db-data:/var/lib/postgresql/data
+
+  webback:
+    image: oussamazaoui872/springboot-app:0dfad8c
+    depends_on:
+      - mydatabase
     environment:
-      POSTGRES_DB: postgres
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: 1234567890
+      SPRING_DATASOURCE_URL: jdbc:postgresql://mydatabase:5432/mydatabase
+      SPRING_DATASOURCE_USERNAME: admin
+      SPRING_DATASOURCE_PASSWORD: securepassword
+    ports:
+      - "8080:8080"
+    command: >
+      java -Dfile.encoding=UTF-8 -Djava.io.tmpdir=/app/tmp -jar /app/spring-boot-data-jpa-0.0.1-SNAPSHOT.jar
+    volumes:
+      - tmp-data:/app/tmp
+
+  webfront:
+    image: oussamazaoui872/angular-app:0dfad8c
+    ports:
+      - "80:80"
+    environment:
+      NGINX_PID_PATH: /var/run/nginx.pid
+    volumes:
+      - nginx-cache:/var/cache/nginx
+      - nginx-run:/var/run
+
+volumes:
+  db-data:
+  tmp-data:
+  nginx-cache:
+  nginx-run:
